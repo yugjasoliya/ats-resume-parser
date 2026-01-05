@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # Core utilities for a lightweight ATS-like resume parser.
 
@@ -23,10 +22,12 @@ SECTION_HEADERS = [
 ]
 
 COMMON_SKILLS = {
-    'sql','python','excel','microsoft excel','power bi','tableau','jira','confluence',
-    'pandas','numpy','matplotlib','seaborn','scikit-learn','machine learning','statistics',
-    'html','css','javascript','git','github','agile','stakeholder management','financial analysis',
-    'market research','data analysis','business intelligence'
+    'sql', 'python', 'excel', 'microsoft excel', 'power bi', 'tableau',
+    'jira', 'confluence', 'pandas', 'numpy', 'matplotlib', 'seaborn',
+    'scikit-learn', 'machine learning', 'statistics', 'html', 'css',
+    'javascript', 'git', 'github', 'agile', 'stakeholder management',
+    'financial analysis', 'market research', 'data analysis',
+    'business intelligence'
 }
 
 def read_text_from_file(file_path: str) -> str:
@@ -52,6 +53,7 @@ def read_text_from_file(file_path: str) -> str:
             text = f.read()
     else:
         raise ValueError('Unsupported file type: ' + ext)
+
     # normalize whitespace
     text = re.sub(r'\r', '\n', text)
     text = re.sub(r'\u00A0', ' ', text)
@@ -66,8 +68,8 @@ def split_lines(text: str) -> List[str]:
 def extract_contact_info(text: str) -> Dict[str, Any]:
     email_regex = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
     phone_regexes = [
-        r'(?:\+?91[\- ]?)?(?:0[\- ]?)?[6-9]\d{9}',           # India mobile
-        r'\+\d{1,3}[\- ]?\(?\d{1,4}\)?[\- ]?\d{3,4}[\- ]?\d{3,4}'  # generic intl
+        r'(?:\+?91[\- ]?)?(?:0[\- ]?)?[6-9]\d{9}',                         # India mobile
+        r'\+\d{1,3}[\- ]?\(?\d{1,4}\)?[\- ]?\d{3,4}[\- ]?\d{3,4}'          # generic intl
     ]
     url_regex = r'https?://[\w\-./?=&%#]+'
 
@@ -187,7 +189,7 @@ def parse_dates(line: str) -> str:
 def parse_experience(lines: List[str], sections: Dict[str, Tuple[int, int]]) -> List[Dict[str, Any]]:
     entries = []
     key = None
-    for k in ['experience','work experience','professional experience']:
+    for k in ['experience', 'work experience', 'professional experience']:
         if k in sections:
             key = k; break
     if not key:
@@ -245,36 +247,3 @@ def parse_languages(lines: List[str], sections: Dict[str, Tuple[int, int]]) -> L
         t = p.strip()
         if t:
             items.append(t)
-    return items
-
-def extract_summary(lines: List[str], sections: Dict[str, Tuple[int, int]]) -> str:
-    if 'summary' in sections:
-        s, e = sections['summary']
-        return ' '.join(lines[s:e]).strip()
-    if 'objective' in sections:
-        s, e = sections['objective']
-        return ' '.join(lines[s:e]).strip()
-    return ''
-
-def build_json_profile(text: str) -> Dict[str, Any]:
-    ls = split_lines(text)
-    sections = locate_sections(ls)
-    contacts = extract_contact_info(text)
-    name = guess_name(ls)
-    skills = parse_skills(text, sections, ls)
-    education = parse_education(ls, sections)
-    experience = parse_experience(ls, sections)
-    certifications = parse_certifications(ls, sections)
-    languages = parse_languages(ls, sections)
-    summary = extract_summary(ls, sections)
-    return {
-        'name': name,
-        'contacts': contacts,
-        'summary': summary,
-        'skills': skills,
-        'education': education,
-        'experience': experience,
-        'certifications': certifications,
-        'languages': languages,
-        'raw_text_length': len(text)
-    }
