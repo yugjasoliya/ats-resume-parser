@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-# Core utilities for a lightweight ATS-like resume parser.
 
+#!/usr/bin/env python3
 import os
 import re
 from typing import List, Dict, Any, Tuple
