@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 import streamlit as st
 import json
@@ -8,7 +9,10 @@ import os
 st.set_page_config(page_title='ATS Resume Parser', layout='wide')
 st.title('ATS Resume Parser (No JD)')
 
-resume_file = st.file_uploader('Upload your resume (.pdf/.docx/.txt)', type=['pdf','docx','txt'])
+resume_file = st.file_uploader(
+    'Upload your resume (.pdf/.docx/.txt)',
+    type=['pdf', 'docx', 'txt']
+)
 
 if resume_file is not None:
     suffix = os.path.splitext(resume_file.name)[1]
@@ -30,3 +34,4 @@ if resume_file is not None:
     )
 
 st.caption('Your file is processed on the server; no external APIs are called.')
+``
